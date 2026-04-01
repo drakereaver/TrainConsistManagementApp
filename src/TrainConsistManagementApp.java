@@ -2,30 +2,22 @@ import java.util.*;
 
 class TrainConsistentManagementApp {
     public static void main(String[] args) {
-        System.out.println("=======================================");
-        System.out.println("UC2 - Add Passenger Bogies to Train");
-        System.out.println("=======================================\n");
+        System.out.println("UC3 - Track Unique Bogie IDs\n");
 
-        List<String> passengerBogies = new ArrayList<>();
+        Set<String> bogies = new HashSet<>();
 
-        passengerBogies.add("Sleeper");
-        passengerBogies.add("AC Chair");
-        passengerBogies.add("First Class");
+        bogies.add("BG101");
+        bogies.add("BG102");
+        bogies.add("BG103");
+        bogies.add("BG104");
+        bogies.add("BG101");
+        bogies.add("BG102");
 
-        System.out.println("After Adding Bogies:");
-        System.out.println("Passenger Bogies : " + passengerBogies);
+        System.out.println("Bogie IDs After Insertion:");
+        System.out.println(bogies);
 
-        passengerBogies.remove("AC Chair");
-
-        System.out.println("After Removing \"AC Chair\":");
-        System.out.println("Passenger Bogies : " + passengerBogies);
-
-        System.out.println("\nChecking if \"Sleeper\" exists:");
-        System.out.println("Contains Sleeper? : " + passengerBogies.contains("Sleeper"));
-
-        System.out.println("\nFinal Train Passenger Consist:");
-        System.out.println(passengerBogies);
-
-        System.out.println("\nUC2 operations completed successfully ...");
+        System.out.println("\nNote:");
+        System.out.println("Duplicates are automatically ignored by HashSet.");
+        System.out.println("UC3 uniqueness validation completed ..");
     }
 }
