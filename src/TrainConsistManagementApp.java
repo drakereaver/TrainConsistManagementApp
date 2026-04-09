@@ -2,36 +2,44 @@ import java.util.*;
 import java.util.stream.*;
 
 public class TrainConsistManagementApp {
-    static class GoodsBogie {
+    static class Bogie {
         String type;
-        String cargo;
-        GoodsBogie(String type, String cargo) {
+        int capacity;
+        Bogie(String type, int capacity) {
             this.type = type;
-            this.cargo = cargo;
-        }
-        @Override
-        public String toString() {
-            return type + " -> " + cargo;
+            this.capacity = capacity;
         }
     }
 
     public static void main(String[] args) {
-        System.out.println("UC12 - Safety Compliance Check for Goods Bogies");
+        System.out.println("===============================================");
+        System.out.println("UC13 - Performance Comparison (Loops vs Streams)");
+        System.out.println("===============================================\n");
 
-        List<GoodsBogie> goodsBogies = new ArrayList<>();
-        goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
-        goodsBogies.add(new GoodsBogie("Open", "Coal"));
-        goodsBogies.add(new GoodsBogie("Box", "Grain"));
-        goodsBogies.add(new GoodsBogie("Cylindrical", "Coal"));
+        List<Bogie> bogies = new ArrayList<>();
+        for (int i = 0; i < 100000; i++) {
+            bogies.add(new Bogie("Type" + i, (i % 100) + 1));
+        }
 
-        System.out.println("Goods Bogies in Train:");
-        goodsBogies.forEach(b -> System.out.println(b));
+        long startLoop = System.nanoTime();
+        List<Bogie> loopFiltered = new ArrayList<>();
+        for (Bogie b : bogies) {
+            if (b.capacity > 60) {
+                loopFiltered.add(b);
+            }
+        }
+        long endLoop = System.nanoTime();
+        long loopTime = endLoop - startLoop;
 
-        boolean isSafe = goodsBogies.stream()
-                .allMatch(b -> !b.type.equals("Cylindrical") || b.cargo.equals("Petroleum"));
+        long startStream = System.nanoTime();
+        List<Bogie> streamFiltered = bogies.stream()
+                .filter(b -> b.capacity > 60)
+                .collect(Collectors.toList());
+        long endStream = System.nanoTime();
+        long streamTime = endStream - startStream;
 
-        System.out.println("Safety Compliance Status: " + isSafe);
-        System.out.println(isSafe ? "Train formation is SAFE." : "Train formation is NOT SAFE.");
-        System.out.println("UC12 safety validation completed ...");
+        System.out.println("Loop Execution Time (ns): " + loopTime);
+        System.out.println("Stream Execution Time (ns): " + streamTime);
+        System.out.println("UC13 performance benchmarking completed ...");
     }
 }
