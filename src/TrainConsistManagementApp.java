@@ -1,39 +1,26 @@
-import java.util.*;
+import java.util.Scanner;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
-class TrainConsistentManagementApp {
-    static class Bogie {
-        String name;
-        int capacity;
-        Bogie(String n, int c) {
-            name = n;
-            capacity = c;
-        }
-        public String toString() {
-            return name + " -> " + capacity;
-        }
-    }
-
+public class TrainConsistManagementApp {
     public static void main(String[] args) {
-        System.out.println("UC7 - Sort Bogies by Capacity (Comparator)\n");
+        Scanner scanner = new Scanner(System.in);
 
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 56));
-        bogies.add(new Bogie("First Class", 24));
-        bogies.add(new Bogie("General", 90));
+        System.out.print("Enter Train ID (Format: TRN-1234): ");
+        String trainId = scanner.nextLine();
 
-        System.out.println("Before Sorting:\n");
-        for (Bogie b : bogies) {
-            System.out.println(b);
-        }
+        System.out.print("Enter Cargo Code (Format: PET-AB): ");
+        String cargoCode = scanner.nextLine();
 
-        bogies.sort(Comparator.comparingInt(b -> b.capacity));
+        Pattern trainPattern = Pattern.compile("TRN-\\d{4}");
+        Pattern cargoPattern = Pattern.compile("PET-[A-Z]{2}");
 
-        System.out.println("\nAfter Sorting by Capacity:\n");
-        for (Bogie b : bogies) {
-            System.out.println(b);
-        }
+        Matcher trainMatcher = trainPattern.matcher(trainId);
+        Matcher cargoMatcher = cargoPattern.matcher(cargoCode);
 
-        System.out.println("\nUC7 sorting completed ...");
+        System.out.println("Validation Results:");
+        System.out.println("Train ID Valid: " + trainMatcher.matches());
+        System.out.println("Cargo Code Valid: " + cargoMatcher.matches());
+        System.out.println("UC11 validation completed ...");
     }
 }
