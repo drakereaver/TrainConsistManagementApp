@@ -1,39 +1,37 @@
 import java.util.*;
+import java.util.stream.*;
 
-class TrainConsistentManagementApp {
-    static class Bogie {
-        String name;
-        int capacity;
-        Bogie(String n, int c) {
-            name = n;
-            capacity = c;
+public class TrainConsistManagementApp {
+    static class GoodsBogie {
+        String type;
+        String cargo;
+        GoodsBogie(String type, String cargo) {
+            this.type = type;
+            this.cargo = cargo;
         }
+        @Override
         public String toString() {
-            return name + " -> " + capacity;
+            return type + " -> " + cargo;
         }
     }
 
     public static void main(String[] args) {
-        System.out.println("UC7 - Sort Bogies by Capacity (Comparator)\n");
+        System.out.println("UC12 - Safety Compliance Check for Goods Bogies");
 
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 56));
-        bogies.add(new Bogie("First Class", 24));
-        bogies.add(new Bogie("General", 90));
+        List<GoodsBogie> goodsBogies = new ArrayList<>();
+        goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        goodsBogies.add(new GoodsBogie("Open", "Coal"));
+        goodsBogies.add(new GoodsBogie("Box", "Grain"));
+        goodsBogies.add(new GoodsBogie("Cylindrical", "Coal"));
 
-        System.out.println("Before Sorting:\n");
-        for (Bogie b : bogies) {
-            System.out.println(b);
-        }
+        System.out.println("Goods Bogies in Train:");
+        goodsBogies.forEach(b -> System.out.println(b));
 
-        bogies.sort(Comparator.comparingInt(b -> b.capacity));
+        boolean isSafe = goodsBogies.stream()
+                .allMatch(b -> !b.type.equals("Cylindrical") || b.cargo.equals("Petroleum"));
 
-        System.out.println("\nAfter Sorting by Capacity:\n");
-        for (Bogie b : bogies) {
-            System.out.println(b);
-        }
-
-        System.out.println("\nUC7 sorting completed ...");
+        System.out.println("Safety Compliance Status: " + isSafe);
+        System.out.println(isSafe ? "Train formation is SAFE." : "Train formation is NOT SAFE.");
+        System.out.println("UC12 safety validation completed ...");
     }
 }
