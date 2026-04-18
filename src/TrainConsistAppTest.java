@@ -1,53 +1,75 @@
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import java.util.*;
+import java.util.stream.Collectors;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class TrainConsistAppTest {
+class TrainConsistAppTest {
 
-    public int[] bubbleSort(int[] capacities) {
-        for (int i = 0; i < capacities.length - 1; i++) {
-            for (int j = 0; j < capacities.length - i - 1; j++) {
-                if (capacities[j] > capacities[j + 1]) {
-                    int temp = capacities[j];
-                    capacities[j] = capacities[j + 1];
-                    capacities[j + 1] = temp;
-                }
-            }
+    static class Bogie {
+        String name;
+        int capacity;
+        Bogie(String n, int c) {
+            name = n;
+            capacity = c;
         }
-        return capacities;
+    }
+
+    private List<Bogie> createBogies() {
+        List<Bogie> bogies = new ArrayList<>();
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("Sleeper", 70));
+        return bogies;
     }
 
     @Test
-    void testSort_BasicSorting() {
-        int[] input = {72, 56, 24, 70, 60};
-        int[] expected = {24, 56, 60, 70, 72};
-        assertArrayEquals(expected, bubbleSort(input));
+    void testReduce_TotalSeatCalculation() {
+        List<Bogie> bogies = createBogies();
+        int total = bogies.stream().map(b -> b.capacity).reduce(0, Integer::sum);
+        assertEquals(222, total);
     }
 
     @Test
-    void testSort_AlreadySortedArray() {
-        int[] input = {24, 56, 60, 70, 72};
-        int[] expected = {24, 56, 60, 70, 72};
-        assertArrayEquals(expected, bubbleSort(input));
+    void testReduce_MultipleBogiesAggregation() {
+        List<Bogie> bogies = createBogies();
+        int total = bogies.stream().map(b -> b.capacity).reduce(0, Integer::sum);
+        assertTrue(total > 0);
     }
 
     @Test
-    void testSort_DuplicateValues() {
-        int[] input = {72, 56, 56, 24};
-        int[] expected = {24, 56, 56, 72};
-        assertArrayEquals(expected, bubbleSort(input));
+    void testReduce_SingleBogieCapacity() {
+        List<Bogie> bogies = Arrays.asList(new Bogie("Sleeper", 72));
+        int total = bogies.stream().map(b -> b.capacity).reduce(0, Integer::sum);
+        assertEquals(72, total);
     }
 
     @Test
-    void testSort_SingleElementArray() {
-        int[] input = {50};
-        int[] expected = {50};
-        assertArrayEquals(expected, bubbleSort(input));
+    void testReduce_EmptyBogieList() {
+        List<Bogie> bogies = new ArrayList<>();
+        int total = bogies.stream().map(b -> b.capacity).reduce(0, Integer::sum);
+        assertEquals(0, total);
     }
 
     @Test
-    void testSort_AllEqualValues() {
-        int[] input = {40, 40, 40};
-        int[] expected = {40, 40, 40};
-        assertArrayEquals(expected, bubbleSort(input));
+    void testReduce_CorrectCapacityExtraction() {
+        List<Bogie> bogies = createBogies();
+        List<Integer> capacities = bogies.stream().map(b -> b.capacity).collect(Collectors.toList());
+        assertTrue(capacities.containsAll(Arrays.asList(72, 56, 24, 70)));
+    }
+
+    @Test
+    void testReduce_AllBogiesIncluded() {
+        List<Bogie> bogies = createBogies();
+        int total = bogies.stream().map(b -> b.capacity).reduce(0, Integer::sum);
+        int manualSum = bogies.get(0).capacity + bogies.get(1).capacity + bogies.get(2).capacity + bogies.get(3).capacity;
+        assertEquals(manualSum, total);
+    }
+
+    @Test
+    void testReduce_OriginalListUnchanged() {
+        List<Bogie> bogies = createBogies();
+        bogies.stream().map(b -> b.capacity).reduce(0, Integer::sum);
+        assertEquals(4, bogies.size());
     }
 }
